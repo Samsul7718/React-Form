@@ -30,3 +30,11 @@ export type ProfessionalInfo = z.infer<typeof professionalInfoSchema>
 export type BillingInfo = z.infer<typeof billingInfoSchema>
 
 export type StepFormData = PersonalInfo | ProfessionalInfo | BillingInfo
+
+export type AllFormFields = PersonalInfo & ProfessionalInfo & BillingInfo
+
+export interface Step {
+    id: string;
+    name: string;
+    icon: React.ComponentType<{className?: string}>;
+}
