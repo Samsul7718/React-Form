@@ -15,6 +15,7 @@ const MultiStepForm = () => {
 const {
   currentStep,
   formData,
+  isSubmitted,
   isFirstStep,
   isLastStep,
   steps,
@@ -44,10 +45,52 @@ reset(formData)
 
 const onNext=async (data: StepFormData) => {
   // manual validation check
+  const isValid = await trigger();
+  if(!isValid) return;
+  console.log("✅ Current Step Data:", data, formData);
+
+  const updatedData = { ...formData, ...data };
+  updateFormData(updatedData);
+
   // Merge current data with all previous data
+ if (isLastStep) {
+   try {
+     handleFinalSubmit(updatedData);
+   } catch (error) {
+     console.error("Error submitting form:", error);
+   }
+ } else {
+   goToNextStep();
+ }
+};
 
+  if (isSubmitted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <Card className="w-full max-w-2xl">
+          <CardContent className="space-y-6 text-center py-16">
+            <p className="text-4xl">✅</p>
+            <h2 className="text-2xl font-semibold">Form submitted successfully</h2>
+            <p className="text-sm text-muted-foreground">
+              Thank you! Your submission has been received.
+            </p>
+            <div className="flex justify-center">
+              <Button
+                type="button"
+                onClick={() => {
+                  resetForm();
+                  reset();
+                }}
+              >
+                Start over
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
-}
   return (
   <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
     <Card className="w-full max-w-2xl">
